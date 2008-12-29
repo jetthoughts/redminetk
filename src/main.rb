@@ -15,5 +15,7 @@ projects = {}
 Project.find(:all).each{|p| projects[p.name] = p}
 
 root = TkRoot.new { title "Time Tracker For Redmine" }
-ProjectIndex.new(root, projects, proc{|n| puts n})
+
+project_list = ProjectIndex.new(root, projects.map{|k,v| k})
+#issue_list = IssueIndex.new(root)
 Tk.mainloop
