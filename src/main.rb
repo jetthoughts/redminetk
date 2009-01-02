@@ -25,7 +25,7 @@ def showIssuesOf(project)
   @issue_list.issues = project.issues.map(&:subject)
 end
 
-puts authenticate
+#puts authenticate
 projects = {}
 Project.find(:all).each{|p| projects[p.name] = p}
 

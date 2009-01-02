@@ -1,4 +1,7 @@
 class Project < Rest
+  self.user = "miry"
+  self.password = "aries"
+  
   def to_s
     name
   end
