@@ -14,12 +14,6 @@ require "views/issues/show"
 #Account
 require "models/account"
 
-def authenticate
-  ActiveResource::Connection.new("http://localhost:3000/").post("/login?username=miry&password=aries")
-  false
-rescue ActiveResource::Redirection
-  true
-end
 
 def showIssuesOf(project)
   @issue_list.issues = project.issues.map(&:subject)
