@@ -25,13 +25,13 @@ end
 
 #puts authenticate
 
-app = Application.new(ProjectIndex, IssueIndex)
-puts app.issues_frame.inspect
 
-#projects = {}
-#Project.find(:all).each{|p| projects[p.name] = p}
+app = Application.new(ProjectIndex, IssueIndex)
+
+projects = {}
+Project.find(:all).each{|p| projects[p.name] = p}
+puts app.projects_frame.projects=projects.map{|k,v| k}
 
 #@issue_list = IssueIndex.new(root)
 #@project_list = ProjectIndex.new(root, projects.map{|k,v| k}, proc{|p| showIssuesOf(projects[p])})
-
 app.run
