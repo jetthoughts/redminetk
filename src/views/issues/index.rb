@@ -1,28 +1,28 @@
-class IssueIndex
+class IssueIndex < TkFrame
   
-  def initialize(parent)
-    frame = TkFrame.new(parent) do
-      pack 'fill' => 'both', 'expand' => 'true'
-    end
-    
+  def initialize(*args)
+    super(*args)
+    config
+  end
+  
+  def config
+    frame = self
     $issues = TkVariable.new([".."])
     
     list_w = TkListbox.new(frame) do
       selectmode 'single'
       pack 'side' => 'right', 'fill' => 'both', 'expand' => 'true'
+      relief "flat"
       listvariable $issues
-    end
-
-    list_w.bind("ButtonRelease-1") do
-      onchoose.call(list_w.get(*list_w.curselection))
     end
     
     scroll_bar = TkScrollbar.new(frame) do
       command proc{|*args| list_w.yview(*args)}
+      width 10
+      relief "flat"
       pack 'side' => 'left', 'fill' => 'y'
     end
     list_w.yscrollcommand {|first,last| scroll_bar.set(first,last) }
-    frame.pack
   end
   
   def issues=(issues)

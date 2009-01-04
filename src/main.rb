@@ -2,6 +2,8 @@ require 'tk'
 require "activeresource"
 require "models/rest"
 
+require 'views/layouts/application'
+
 #Projects
 require "models/project"
 require "views/projects/index"
@@ -16,16 +18,20 @@ require "models/account"
 
 
 def showIssuesOf(project)
-  @issue_list.issues = project.issues.map(&:subject)
+  @issue_list.issues = project.issues.map do |i|
+    "#{i.project.to_s+" - " if i.project_id != project.id}" + " #{i.subject}"
+  end
 end
 
 #puts authenticate
-projects = {}
-Project.find(:all).each{|p| projects[p.name] = p}
 
-root = TkRoot.new { title "Time Tracker For Redmine" }
+app = Application.new(ProjectIndex, IssueIndex)
+puts app.issues_frame.inspect
 
-@issue_list = IssueIndex.new(root)
-@project_list = ProjectIndex.new(root, projects.map{|k,v| k}, proc{|p| showIssuesOf(projects[p])})
+#projects = {}
+#Project.find(:all).each{|p| projects[p.name] = p}
 
-Tk.mainloop
+#@issue_list = IssueIndex.new(root)
+#@project_list = ProjectIndex.new(root, projects.map{|k,v| k}, proc{|p| showIssuesOf(projects[p])})
+
+app.run
