@@ -1,16 +1,15 @@
-class ProjectIndex < TkFrame
+class ProjectIndex < TkLabelFrame
   def initialize(*args)
     super(*args)
     config
+    text "Projects:"
   end
   
-  def config(projects = [], onchange = proc{|*args| true })
-    frame = self
-    
+  def config(projects = [])
     $project_names = TkVariable.new(projects)
-    @onchange = onchange
+    @onchange = proc{|*args| true }
     
-    list_w = TkListbox.new(frame) do
+    list_w = TkListbox.new(self) do
       selectmode 'single'
       pack 'side' => 'right', 'fill' => 'both', 'expand' => 'true'
       listvariable $project_names
@@ -18,10 +17,10 @@ class ProjectIndex < TkFrame
     end
 
     list_w.bind("ButtonRelease-1") do
-      @onchange.call(list_w.get(*list_w.curselection)) unless list_w.curselection.blank?
+      @onchange.call(*list_w.curselection) unless list_w.curselection.blank?
     end
     
-    scroll_bar = TkScrollbar.new(frame) do
+    scroll_bar = TkScrollbar.new(self) do
       command proc{|*args| list_w.yview(*args)}
       width 10
       relief "flat"
@@ -38,7 +37,7 @@ class ProjectIndex < TkFrame
     $project_names.to_a
   end
   
-  def onchange=(onchange = proc{|*args|true})
-    @onchange = onchange
+  def onchange=(onchange = proc{|*args| true})
+    @onchange = onchange if onchange.is_a?(Proc)
   end
 end

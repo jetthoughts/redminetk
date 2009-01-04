@@ -16,22 +16,25 @@ require "views/issues/show"
 #Account
 require "models/account"
 
+def show_issue(issue)
+  @app.issue_frame.issue = issue
+end
 
-def showIssuesOf(project)
-  @issue_list.issues = project.issues.map do |i|
+def show_issues_for(project)
+  @issues = project.issues
+  @app.issues_frame.issues = project.issues.map do |i|
     "#{i.project.to_s+" - " if i.project_id != project.id}" + " #{i.subject}"
   end
 end
 
-#puts authenticate
+@app = Application.new(ProjectIndex, IssueIndex, IssueShow)
 
+@projects = Project.find(:all)
+@issues = []
 
-app = Application.new(ProjectIndex, IssueIndex)
+@app.projects_frame.projects=@projects.map{|k,v| k}
+@app.projects_frame.onchange = proc{|id| show_issues_for(@projects[id])}
 
-projects = {}
-Project.find(:all).each{|p| projects[p.name] = p}
-puts app.projects_frame.projects=projects.map{|k,v| k}
+@app.issues_frame.onchange = proc{|id| show_issue(@issues[id])}
 
-#@issue_list = IssueIndex.new(root)
-#@project_list = ProjectIndex.new(root, projects.map{|k,v| k}, proc{|p| showIssuesOf(projects[p])})
-app.run
+@app.run

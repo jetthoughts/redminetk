@@ -5,7 +5,6 @@ class Project < Rest
   end
   
   def issues
-    Issue.find_by_project_id(self.id)
-    #get(:issues).map{|i| Issue.new(i)}
+    @issues ||= Issue.find_by_project_id(self.id)
   end
 end

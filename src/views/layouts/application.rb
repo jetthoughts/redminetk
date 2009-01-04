@@ -3,10 +3,7 @@ class Application
   attr_accessor :projects_frame, :issues_frame, :issue_frame
   
   def initialize(projects_frame = TkFrame, issues_frame = TkFrame, issue_frame = TkFrame)
-    @root = TkRoot.new do
-      title "Time Tracker For Redmine"
-      background "red"
-    end
+    @root = TkRoot.new {title "Time Tracker For Redmine"}
     
     tpaned = TkPanedwindow.new(@root) do
       orient "horizontal"
@@ -24,12 +21,9 @@ class Application
     
     @issues_frame = issues_frame.new(@root) do
       height 200
-      background "blue"
     end
     
-    @issue_frame = issue_frame.new(@root) do
-      background "black"
-    end
+    @issue_frame = issue_frame.new(@root)
 
     rpaned.add @issues_frame
     rpaned.add @issue_frame
