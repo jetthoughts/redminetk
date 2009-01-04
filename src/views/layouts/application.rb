@@ -10,9 +10,7 @@ class Application
       pack :fill => "both", :expand => 1
     end
     
-    @projects_frame = projects_frame.new(@root) do
-      width 200
-    end
+    @projects_frame = projects_frame.new(@root)
     
     rpaned = TkPanedwindow.new(@root) do
       orient "vertical"

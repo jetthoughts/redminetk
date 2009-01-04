@@ -14,7 +14,11 @@ require "views/issues/index"
 require "views/issues/show"
 
 #Account
-require "models/account"
+require "models/timelog"
+
+def show_users(users)
+  users.blank? ? "- - -" : users.map{|u| u.lastname}.join(",")
+end
 
 def show_issue(issue)
   @app.issue_frame.issue = issue
@@ -22,8 +26,9 @@ end
 
 def show_issues_for(project)
   @issues = project.issues
-  @app.issues_frame.issues = project.issues.map do |i|
-    "#{i.project.to_s+" - " if i.project_id != project.id}" + " #{i.subject}"
+  @app.issues_frame.issues = @issues.map do |i|
+    (i.project_id != project.id ? i.project.to_s + " - " : "" ) + 
+      " #{i.subject} | #{i.status.name} | #{show_users(i.assigned_to_users)}"
   end
 end
 

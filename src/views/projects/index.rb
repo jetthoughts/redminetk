@@ -1,12 +1,25 @@
 class ProjectIndex < TkLabelFrame
   def initialize(*args)
     super(*args)
-    config
     text "Projects:"
+    ui
+  end
+
+  def projects=(projects)
+    $project_names.value = TkVariable.new(projects)
   end
   
-  def config(projects = [])
-    $project_names = TkVariable.new(projects)
+  def projects
+    $project_names.to_a
+  end
+  
+  def onchange=(onchange = proc{|*args| true})
+    @onchange = onchange if onchange.is_a?(Proc)
+  end
+
+  private  
+  def ui
+    $project_names = TkVariable.new([])
     @onchange = proc{|*args| true }
     
     list_w = TkListbox.new(self) do
@@ -29,15 +42,4 @@ class ProjectIndex < TkLabelFrame
     list_w.yscrollcommand {|first,last| scroll_bar.set(first,last) }
   end
   
-  def projects=(projects)
-    $project_names.value = TkVariable.new(projects)
-  end
-  
-  def projects
-    $project_names.to_a
-  end
-  
-  def onchange=(onchange = proc{|*args| true})
-    @onchange = onchange if onchange.is_a?(Proc)
-  end
 end
