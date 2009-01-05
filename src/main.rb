@@ -16,8 +16,12 @@ require "views/issues/show"
 #Account
 require "models/timelog"
 
+def show_content(cont)
+  cont.nil? ? "--" : cont
+end
+
 def show_users(users)
-  users.blank? ? "- - -" : users.map{|u| u.lastname}.join(",")
+  show_content(users.map{|u| u.lastname}.join(","))
 end
 
 def show_issue(issue)
@@ -27,8 +31,9 @@ end
 def show_issues_for(project)
   @issues = project.issues
   @app.issues_frame.issues = @issues.map do |i|
+    "#{i.id}: " +
     (i.project_id != project.id ? i.project.to_s + " - " : "" ) + 
-      " #{i.subject} | #{i.status.name} | #{show_users(i.assigned_to_users)}"
+      "#{i.subject} | #{i.status.name}"
   end
 end
 

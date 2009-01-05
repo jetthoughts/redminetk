@@ -8,10 +8,10 @@ class IssueShow < TkLabelFrame
 
   def issue=(issue)
     text "Issue \##{issue.id}"
-    $assignees.value = TkVariable.new(show_users(issue.assigned_to_users) || "--")
-    $estimate.value = TkVariable.new("#{issue.estimated_hours} hour(s)" || "--")
-    $description.value = TkVariable.new(issue.description || "--")
-    $spent.value = TkVariable.new(issue.spent_hours || "--" )
+    $assignees.value = TkVariable.new(show_users(issue.assigned_to_users))
+    $estimate.value = TkVariable.new(show_content(issue.estimated_hours))
+    $description.value = TkVariable.new(show_content(issue.description))
+    $spent.value = TkVariable.new(show_content(issue.spent_hours))
   end
 
   private

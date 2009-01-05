@@ -6,8 +6,7 @@ class Issue < Rest
   
   def spent_hours
     @time_entries ||= Timelog.find_by_issue_id(self.id)
-    puts self.id
-    @spent ||= @time_entries.map(&:hours).sum(:hours) || 0
+    @spent ||= @time_entries.blank? ? 0 : @time_entries.map(&:hours).sum(:hours)
   end
   
 end
