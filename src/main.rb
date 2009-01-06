@@ -1,4 +1,7 @@
 require 'tk'
+#require 'tkextlib/bwidget'
+require 'tkextlib/iwidgets'
+
 require "activeresource"
 require "models/rest"
 
@@ -42,7 +45,7 @@ end
 @projects = Project.find(:all)
 @issues = []
 
-@app.projects_frame.projects=@projects.map{|k,v| k}
+@app.projects_frame.projects = @projects.map{|k,v| k}
 @app.projects_frame.onchange = proc{|id| show_issues_for(@projects[id])}
 
 @app.issues_frame.onchange = proc{|id| show_issue(@issues[id])}
