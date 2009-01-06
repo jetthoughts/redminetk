@@ -11,7 +11,8 @@ class IssueShow < TkLabelFrame
     $assignees.value = TkVariable.new(show_users(issue.assigned_to_users))
     $estimate.value = TkVariable.new(show_content(issue.estimated_hours))
     $description.value = TkVariable.new(show_content(issue.description))
-    $spent.value = TkVariable.new(show_content(issue.spent_hours))
+    $status.value = TkVariable.new(show_content(issue.status.name))
+    $spent.value = TkVariable.new(issue.spent_hours > 0 ? show_content(issue.spent_hours) : "--")
   end
 
   private
@@ -20,62 +21,28 @@ class IssueShow < TkLabelFrame
     $estimate = TkVariable.new("none")
     $description = TkVariable.new("none")
     $spent = TkVariable.new("none")
+    $status = TkVariable.new("none")
     
-    raw = TkFrame.new(self) do
-      pack :side => "top", :fill => "x"
-    end
+    info = [$description, "Description:",
+      $assignees, "Assigned to:",
+      $spent, "Spent:",
+      $estimate, "Estimate:",
+      $status, "Status:"]
     
-    TkLabel.new(raw) do
-      text "Assigned to:"
-      pack :side => "left"
-    end
-
-    TkLabel.new(raw) do
-      textvariable $assignees
-      pack :side => "left"
-    end
-    
-    raw = TkFrame.new(self) do
-      pack :side => "top", :fill => "x"
-    end
-    
-    TkLabel.new(raw) do
-      text "Spent:"
-      pack :side => "left"
-    end
-
-    TkLabel.new(raw) do
-      textvariable $spent
-      pack :side => "left"
-    end
-    
-    raw = TkFrame.new(self) do
-      pack :side => "top", :fill => "x"
-    end
-    
-    TkLabel.new(raw) do
-      text "Estimate:"
-      pack :side => "left"
-    end
-
-    TkLabel.new(raw) do
-      textvariable $estimate
-      pack :side => "left"
-    end
-    
-    raw = TkFrame.new(self) do
-      pack :side => "top", :fill => "x"
-    end
-    
-    TkLabel.new(raw) do
-      text "Description:"
-      pack :side => "left"
-    end
-
-    TkLabel.new(raw) do
-      textvariable $description
-      pack :side => "left"
+    i = 0; len = info.size
+    while(i < len)
+        raw = TkFrame.new(self){pack :side => "top", :fill => "x"}
+      
+        TkLabel.new(raw) do
+          text info[i+1]
+          pack :side => "left"
+        end
+      
+        TkLabel.new(raw) do
+          textvariable info[i]
+          pack :side => "left"
+        end
+        i += 2
     end
   end
-
 end

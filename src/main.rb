@@ -33,7 +33,7 @@ def show_issues_for(project)
   @app.issues_frame.issues = @issues.map do |i|
     "#{i.id}: " +
     (i.project_id != project.id ? i.project.to_s + " - " : "" ) + 
-      "#{i.subject} | #{i.status.name}"
+      "#{i.subject}"
   end
 end
 
