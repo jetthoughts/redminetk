@@ -23,11 +23,13 @@ class IssueShow < TkLabelFrame
     $spent = TkVariable.new("none")
     $status = TkVariable.new("none")
     
-    info = [$description, "Description:",
+    info = [
+      $description, "Description:",
+      $status, "Status:",
       $assignees, "Assigned to:",
       $spent, "Spent:",
-      $estimate, "Estimate:",
-      $status, "Status:"]
+      $estimate, "Estimate:"]
+      
     
     i = 0; len = info.size
     while(i < len)

@@ -13,8 +13,8 @@ require "models/issue"
 require "views/issues/index"
 require "views/issues/show"
 
-#Account
 require "models/timelog"
+require "views/timelog/new"
 
 def show_content(cont)
   cont.nil? ? "--" : cont
@@ -37,7 +37,7 @@ def show_issues_for(project)
   end
 end
 
-@app = Application.new(ProjectIndex, IssueIndex, IssueShow)
+@app = Application.new(ProjectIndex, IssueIndex, IssueShow, TimelogNew)
 
 @projects = Project.find(:all)
 @issues = []
