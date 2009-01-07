@@ -1,3 +1,4 @@
+require 'rubygems'
 require 'tk'
 #require 'tkextlib/bwidget'
 require 'tkextlib/iwidgets'
@@ -40,6 +41,14 @@ def show_issues_for(project)
   end
 end
 
+
+#t = TimeEntry.find(23)
+#t.hours = 10
+#t.save
+#puts t.inspect
+#t.save
+#puts TimeEntry.commit(1, :comments => "Hellow", :issue_id => 1, :hours => 22, :activity_id => 9 ).inspect
+#exit
 @app = Application.new(ProjectIndex, IssueIndex, IssueShow, TimelogNew)
 
 @projects = Project.find(:all)

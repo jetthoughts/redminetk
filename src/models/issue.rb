@@ -4,12 +4,8 @@ class Issue < Rest
     self.find(:all, :params => {:project_id => project_id})
   end
   
-  def time_entries
-    @time_entries ||= Timelog.find_by_issue_id(self.id)
-  end
-  
   def spent_hours
-    @spent ||= time_entries.blank? ? 0 : time_entries.sum(:hours)
+    @spent ||= time_entries.blank? ? 0 : time_entries.map(&:hours).sum
   end
   
 end
