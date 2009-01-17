@@ -1,4 +1,4 @@
-require 'models/timelog'
+require 'models/time_entry'
 require 'models/issue'
 
 class Enumeration < Rest

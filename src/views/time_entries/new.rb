@@ -1,56 +1,54 @@
-class TimelogNew < TkLabelFrame
+class TimeEntriesNew < TkLabelFrame
   def initialize(*args)
     super(*args)
     text "Log Time:"
     @activity = TkVariable.new
     @activities = TimeEntry.available_enumerations
-    config
+    @onsubmit = proc {|*args| false}
+    ui
   end
-
-  def issue=(issue)
-    @issue = issue
+ 
+  def onsubmit=(onsubmit)
+    @onsubmit = onsubmit
   end
 
   private
-  def config
+  def ui
+    raw = TkFrame.new(self).pack(:side => 'top', :fill => 'x')
+    TkLabel.new(raw){text "Spent On*:"}.pack(:side => "left")
+    @spent_on = Tk::Iwidgets::Dateentry.new(raw).pack(:side => 'left', :padx => 12, :pady => 10)
 
     raw = TkFrame.new(self).pack(:side => 'top', :fill => 'x')
-    TkLabel.new(raw){text "Date:"}.pack(:side => "left")
-    @date = Tk::Iwidgets::Dateentry.new(raw).pack(:side => 'left', :pady => 10)
+    TkLabel.new(raw){text "Hours*:"}.pack(:side => "left")
+    @hours = TkEntry.new(raw){width 5}.pack("side"=>"left", "fill"=>"x", :padx => 30, :pady => 10)
 
     raw = TkFrame.new(self).pack(:side => 'top', :fill => 'x')
-    TkLabel.new(raw){text "Hours:"}.pack(:side => "left")
-    @time = TkEntry.new(raw){width 5}.pack("side"=>"left", "fill"=>"x", :pady => 10)
+    TkLabel.new(raw){text "Comments:"}.pack(:side => "left")
+    @comments = TkEntry.new(raw){width 35}.pack("side"=>"left", "fill"=>"x", :padx => 6, :pady => 10)
 
     raw = TkFrame.new(self).pack(:side => 'top', :fill => 'x')
-    TkLabel.new(raw){text "Comment:"}.pack(:side => "left")
-    @comment = TkEntry.new(raw){
-      width 35
-    }.pack("side"=>"left", "fill"=>"x", :pady => 10)
+    TkLabel.new(raw){text "Activity*:"}.pack(:side => "left")
+    TkOptionMenubutton.new(raw, @activity, *TkVariable.new(["---"] + @activities)){
+      pack('side' => 'left', 'fill' => 'x', :padx => 15, :pady => 10)}
 
-    raw = TkFrame.new(self).pack(:side => 'top', :fill => 'x')
-    TkLabel.new(raw){text "Activity:"}.pack(:side => "left")
-    TkOptionMenubutton.new(raw, @activity, *TkVariable.new(@activities)).pack('side' => 'left', 'fill' => 'x', :pady => 10)
-
-    p = proc {|*args| commit_time(args)}
-    raw = TkFrame.new(self).pack(:side => 'top', :fill => 'x')
-    TkButton.new(raw) do
+    submitProc = proc {submit}
+    TkButton.new(TkFrame.new(self).pack(:side => 'bottom', :fill => 'x')) do
       text("Save")
-      command p
-      pack :side => "right"
+      command submitProc
+      pack
     end
   end
-
-  def commit_time(args)
-    return if @issue.nil? or !@time.value or !@date.get
+  
+  def submit
+    return unless @hours.value > 0 and @spent_on.get
     @activities.each do |a|
       if a.name == @activity.value
-        TimeEntry.commit(@issue.id, :comments => @comment.value, :hours => @time.value, :activity_id => a.id, :spent_on => @date.get)
-        @issue.time_entries.reload
+        @onsubmit.call(:comments => @comment.value,
+                       :hours => @hours.value,
+                       :activity_id => a.id,
+                       :spent_on => @spent_on.get)
         break
       end
     end
   end
-
-
 end
