@@ -46,6 +46,7 @@ class TimelogNew < TkLabelFrame
     @activities.each do |a|
       if a.name == @activity.value
         TimeEntry.commit(@issue.id, :comments => @comment.value, :hours => @time.value, :activity_id => a.id, :spent_on => @date.get)
+        @issue.time_entries.reload
         break
       end
     end
