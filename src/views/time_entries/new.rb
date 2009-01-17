@@ -32,18 +32,23 @@ class TimeEntriesNew < TkLabelFrame
       pack('side' => 'left', 'fill' => 'x', :padx => 15, :pady => 10)}
 
     submitProc = proc {submit}
-    TkButton.new(TkFrame.new(self).pack(:side => 'bottom', :fill => 'x')) do
+    raw = TkFrame.new(self).pack(:side => 'top', :fill => 'x')
+    TkButton.new(raw) do
       text("Save")
       command submitProc
-      pack
+      pack :side => "left"
     end
   end
   
+  def validate?
+     @hours.value.to_i > 0 and @spent_on.get      
+  end
+  
   def submit
-    return unless @hours.value > 0 and @spent_on.get
+    return unless validate?
     @activities.each do |a|
       if a.name == @activity.value
-        @onsubmit.call(:comments => @comment.value,
+        @onsubmit.call(:comments => @comments.value,
                        :hours => @hours.value,
                        :activity_id => a.id,
                        :spent_on => @spent_on.get)

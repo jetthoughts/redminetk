@@ -11,8 +11,8 @@ class TimeEntry < Rest
     self.find(:all, :params => { :issue_id => id})
   end
 
-  def self.commit(opts = {})
-    post(:edit, :time_entry => opts, :issue_id => opts[:issue_id])
+  def self.commit(issue_id, opts = {})
+    post(:edit, :time_entry => opts, :issue_id => issue_id)
   end
 
   def self.available_enumerations

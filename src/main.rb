@@ -21,8 +21,8 @@ def show_users(users)
 end
 
 def show_issue(issue)
-    @app.issue_frame.issue = issue
-    @app.spent_time_frame.issue = issue
+    @issue = issue
+    @app.issue_frame.issue = @issue
 end
 
 def show_issues_for(project)
@@ -35,15 +35,8 @@ def show_issues_for(project)
 
 end
 
-def commit_time(args)
-  return if @issue.nil? or !@time.value or !@date.get
-  @activities.each do |a|
-    if a.name == @activity.value
-      TimeEntry.commit(@issue.id, :comments => @comment.value, :hours => @time.value, :activity_id => a.id, :spent_on => @date.get)
-      @issue.time_entries.reload
-      break
-    end
-  end
+def commit_time(time_entry)
+  TimeEntry.commit(@issue.id, time_entry) if @issue
 end
 
 @projects = Project.find(:all)
@@ -54,5 +47,5 @@ end
 @app.projects_frame.projects = @projects.map{|k,v| k}
 @app.projects_frame.onchange = proc{|id| show_issues_for(@projects[id])}
 @app.issues_frame.onchange = proc{|id| show_issue(@issues[id])}
-@app.spent_time_frame.onsubmit = proc{|*time_entry| puts time_entry.inspect}
+@app.spent_time_frame.onsubmit = proc{|time_entry| commit_time time_entry}
 @app.run
