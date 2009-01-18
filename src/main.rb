@@ -23,6 +23,7 @@ end
 def show_issue(issue)
     @issue = issue
     @app.issue_frame.issue = @issue
+    @app.spent_time_frame.enable
 end
 
 def show_issues_for(project)

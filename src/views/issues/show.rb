@@ -3,48 +3,35 @@ class IssueShow < TkLabelFrame
   def initialize(*args)
     super(*args)
     text "Issue \#-"
+    @info = []
     ui
   end
 
   def issue=(issue)
     text "Issue \##{issue.id}"
-    $assignees.value = TkVariable.new(show_users(issue.assigned_to_users))
-    $estimate.value = TkVariable.new(show_content(issue.estimated_hours))
-    $description.value = TkVariable.new(show_content(issue.description))
-    $status.value = TkVariable.new(show_content(issue.status.name))
-    $spent.value = TkVariable.new(issue.spent_hours > 0 ? show_content(issue.spent_hours) : "--")
+    @info[0].value = show_content(issue.description)
+    @info[1].value = show_content(issue.status.name)
+    @info[2].value = show_users(issue.assigned_to_users)
+    @info[3].value = issue.spent_hours > 0 ? show_content(issue.spent_hours) : "--"
+    @info[4].value = issue.estimated_hours
   end
 
   private
   def ui
-    $assignees = TkVariable.new("none")
-    $estimate = TkVariable.new("none")
-    $description = TkVariable.new("none")
-    $spent = TkVariable.new("none")
-    $status = TkVariable.new("none")
-    
-    info = [
-      $description, "Description:",
-      $status, "Status:",
-      $assignees, "Assigned to:",
-      $spent, "Spent:",
-      $estimate, "Estimate:"]
-      
-    
-    i = 0; len = info.size
-    while(i < len)
+    [ "Description:",
+      "Status:",
+      "Assigned to:",
+      "Spent:",
+      "Estimate:"].each do |l|
         raw = TkFrame.new(self){pack :side => "top", :fill => "x"}
-      
-        TkLabel.new(raw) do
-          text info[i+1]
-          pack :side => "left"
+        TkLabel.new(raw){text l}.pack :side => "left"
+        @info << TkText.new(raw) do
+          insert(:end, "none")
+          width 50
+          height 1
+          wrap :word
+          pack :side => "left", :fill => "x"
         end
-      
-        TkLabel.new(raw) do
-          textvariable info[i]
-          pack :side => "left"
-        end
-        i += 2
     end
   end
 end
