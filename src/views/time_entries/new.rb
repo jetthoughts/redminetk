@@ -44,7 +44,7 @@ class TimeEntriesNew < TkLabelFrame
     @submit_button = TkButton.new(raw) do
       text("Save")
       command submitProc
-      pack :side => "left"
+      pack :side => "left", :padx => 10
       state :disabled
     end
   end
